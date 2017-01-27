@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- This will be overridden if we're building with MicroBuild. -->
+  <Target Name="SignFiles">
+    <Message Text="Fake sign target.  Would sign: @(FilesToSign)" />
+  </Target>
+
+  <Target Name="SetSignFilesOutDir" BeforeTargets="SignFiles">
+    <PropertyGroup>
+      <OutDir Condition="'$(OutDir)' == ''">$(OutputDirectory)</OutDir>
+      <IntermediateOutputPath Condition="'$(IntermediateOutputPath)' == ''">$(IntermediateDirectory)</IntermediateOutputPath>
+    </PropertyGroup>
+  </Target>
+
+  <Import Project="$(RepoRoot)\build_tools\MicroBuild.Core.props" />
+  <Import Project="$(RepoRoot)\build_tools\MicroBuild.Core.targets" />
+
+  <Target Name="PostCompileSign" DependsOnTargets="GetPostCompileSignFiles">
+    <CallTarget Targets="SignFiles" />
+  </Target>
+
+  <Target Name="GetPostCompileSignFiles" DependsOnTargets="Init">
+    <ItemGroup>
+      <!-- External files -->
+      <FilesToSign Include="$(OutputDirectory)sdk/**/Newtonsoft.Json.dll">
+        <Authenticode>$(ExternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)shared/**/libuv.dll">
+        <Authenticode>$(ExternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <!-- Built binaries -->
+      <FilesToSign Include="$(OutputDirectory)sdk/**/csc.exe">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/csc.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/dotnet.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/System.*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/Microsoft.*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/NuGet*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/datacollector.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/MSBuild.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/testhost.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)sdk/**/vstest.console.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <!-- Built files for the packages -->
+      <FilesToSign Include="$(Stage2CompilationDirectory)/forPackaging/**/*dotnet*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(Stage2CompilationDirectory)/forPackaging/**/Microsoft.Extensions.DependencyModel.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(Stage2CompilationDirectory)/forPackaging/**/Microsoft.Extensions.Testing.Abstractions.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SignNuPkgContents" DependsOnTargets="GetSignNuPkgContentsFiles">
+    <CallTarget Targets="SignFiles" />
+  </Target>
+
+  <Target Name="GetSignNuPkgContentsFiles" DependsOnTargets="Init">
+    <PropertyGroup>
+      <OutDir>$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils</OutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- NuPkg contents -->
+      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/bin/**/*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/bin/**/*.exe">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/obj/**/*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/obj/**/*.exe">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SignSharedFrameworkCrossgenedAssemblies" DependsOnTargets="GetSignSharedFrameworkCrossgenedAssembliesFiles">
+    <CallTarget Targets="SignFiles" />
+  </Target>
+
+  <Target Name="GetSignSharedFrameworkCrossgenedAssembliesFiles" DependsOnTargets="Init">
+    <PropertyGroup>
+      <OutDir>$(OutputDirectory)shared</OutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <FilesToSign Include="$(OutputDirectory)shared/**/Microsoft.*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(OutputDirectory)shared/**/System.*.dll">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SignMsiAndCab" DependsOnTargets="GetSignMsiAndCabFiles">
+    <CallTarget Targets="SignFiles" />
+  </Target>
+
+  <Target Name="GetSignMsiAndCabFiles" DependsOnTargets="Init">
+    <PropertyGroup>
+      <OutDir>$(PackagesDirectory)</OutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <FilesToSign Include="$(PackagesDirectory)/**/*.msi">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+      <FilesToSign Include="$(PackagesDirectory)/**/*.cab">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SignEngine" DependsOnTargets="GetSignEngineFiles">
+    <CallTarget Targets="SignFiles" />
+  </Target>
+
+  <Target Name="GetSignEngineFiles" DependsOnTargets="Init">
+    <PropertyGroup>
+      <OutDir>$(PackagesDirectory)</OutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <FilesToSign Include="$(PackagesDirectory)/**/*engine.exe">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SignCliBundle" DependsOnTargets="GetSignCliBundleFiles">
+    <CallTarget Targets="SignFiles" />
+  </Target>
+
+  <Target Name="GetSignCliBundleFiles" DependsOnTargets="Init">
+    <PropertyGroup>
+      <OutDir>$(PackagesDirectory)</OutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <FilesToSign Include="$(PackagesDirectory)/**/*.exe">
+        <Authenticode>$(InternalCertificateId)</Authenticode>
+      </FilesToSign>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="BeforeBuild" BeforeTargets="InitializeCommonProps" Condition="'$(SkipMsBuild15Projects)' == 'True'">
+    <HandleAssemblyResolve SearchPath="$(RepoRoot)\build_tools" />
+  </Target>
+  <UsingTask TaskName="HandleAssemblyResolve" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" Condition="'$(SkipMsBuild15Projects)' == 'True'" >
+    <ParameterGroup>
+      <SearchPath ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Reflection" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+AppDomain.CurrentDomain.AssemblyResolve += (sender, e) => 
+{ 
+  var assemblySearchPath = Path.Combine(SearchPath, e.Name.Split(',')[0] + ".dll");
+  Console.WriteLine("Searching " + assemblySearchPath);
+  if (File.Exists(assemblySearchPath)) 
+  {
+    Console.WriteLine("Found");
+    return Assembly.LoadFrom(assemblySearchPath);
+  }
+  else
+  {
+    Console.WriteLine("Not found");
+  }
+  return null;
+};
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+</Project>
