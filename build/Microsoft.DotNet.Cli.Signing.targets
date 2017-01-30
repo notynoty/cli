@@ -82,16 +82,7 @@
     </PropertyGroup>
     <ItemGroup>
       <!-- NuPkg contents -->
-      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/bin/**/*.dll">
-        <Authenticode>$(InternalCertificateId)</Authenticode>
-      </FilesToSign>
-      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/bin/**/*.exe">
-        <Authenticode>$(InternalCertificateId)</Authenticode>
-      </FilesToSign>
-      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/obj/**/*.dll">
-        <Authenticode>$(InternalCertificateId)</Authenticode>
-      </FilesToSign>
-      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/obj/**/*.exe">
+      <FilesToSign Include="$(RepoRoot)/src/Microsoft.DotNet.Cli.Utils/bin/**/Microsoft.DotNet.Cli.Utils.dll">
         <Authenticode>$(InternalCertificateId)</Authenticode>
       </FilesToSign>
     </ItemGroup>
