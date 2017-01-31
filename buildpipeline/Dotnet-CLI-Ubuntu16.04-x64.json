@@ -121,7 +121,7 @@
       "branches": [
         "+refs/heads/*"
       ],
-      "artifacts": [],
+      "artifacts": [ ],
       "artifactTypesToDelete": [
         "FilePath",
         "SymbolStore"
