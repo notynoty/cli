@@ -2,10 +2,6 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(RepoRoot)\build_tools\MicroBuild.Core.props" />
 
-  <Target Name="HandleBuildToolsAssemblyResolve" BeforeTargets="InitializeCommonProps" Condition="'$(SkipMsBuild15Projects)' == 'True'">
-    <HandleAssemblyResolve SearchPath="$(RepoRoot)\build_tools" />
-  </Target>
-
   <!-- This will be overridden if we're building with MicroBuild. -->
   <Target Name="SignFiles">
     <Message Text="Fake sign target.  Would sign: @(FilesToSign)" />
@@ -17,7 +13,7 @@
       <IntermediateOutputPath Condition="'$(IntermediateOutputPath)' == ''">$(IntermediateDirectory)</IntermediateOutputPath>
     </PropertyGroup>
   </Target>
-  
+
   <Target Name="PostCompileSign" DependsOnTargets="GetPostCompileSignFiles;SignFiles" />
 
   <Target Name="GetPostCompileSignFiles" DependsOnTargets="Init">
@@ -104,6 +100,39 @@
       </FilesToSign>
     </ItemGroup>
   </Target>
+
+  <Target Name="HandleBuildToolsAssemblyResolve" BeforeTargets="InitializeCommonProps" Condition="'$(SkipMsBuild15Projects)' == 'True'">
+    <HandleAssemblyResolve SearchPath="$(RepoRoot)\build_tools" />
+  </Target>
+  <UsingTask TaskName="HandleAssemblyResolve" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" Condition="'$(SkipMsBuild15Projects)' == 'True'" >
+    <ParameterGroup>
+      <SearchPath ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Reflection" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => 
+{ 
+  string assemblySearchPath = Path.Combine(SearchPath, args.Name.Split(',')[0] + ".dll");
+  Console.WriteLine($"Probing for '{assemblySearchPath}'.);
+  if (File.Exists(assemblySearchPath)) 
+  {
+    Console.WriteLine("Assembly found.");
+    return Assembly.LoadFrom(assemblySearchPath);
+  }
+  else
+  {
+    Console.WriteLine("Assembly not found.");
+  }
+  return null;
+};
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
 
   <Import Project="$(RepoRoot)\build_tools\MicroBuild.Core.targets" />
 </Project>

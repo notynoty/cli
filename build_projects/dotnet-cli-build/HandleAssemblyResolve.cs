@@ -30,7 +30,7 @@ namespace Microsoft.DotNet.Cli.Build
         private Assembly CurrentDomainAssemblyResolve(object sender, ResolveEventArgs args)
         {
             string assemblySearchPath = Path.Combine(SearchPath, args.Name.Split(',')[0] + ".dll");
-
+            string a = $"the {SearchPath}";
             Log.LogMessage(MessageImportance.Low, "Probing for '{0}'.", assemblySearchPath);
             if (File.Exists(assemblySearchPath))
             {
