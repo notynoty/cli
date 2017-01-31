@@ -406,7 +406,7 @@
       "value": "PassedViaPipeBuild"
     },
     "PUBLISH_TO_AZURE_BLOB": {
-      "value": "true",
+      "value": "",
       "allowOverride": true
     },
     "BuildArchitecture": {
