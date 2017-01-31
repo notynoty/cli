@@ -117,7 +117,7 @@
 AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => 
 { 
   string assemblySearchPath = Path.Combine(SearchPath, args.Name.Split(',')[0] + ".dll");
-  Console.WriteLine($"Probing for '{assemblySearchPath}'.);
+  Console.WriteLine("Probing for '" + assemblySearchPath + "'.");
   if (File.Exists(assemblySearchPath)) 
   {
     Console.WriteLine("Assembly found.");
