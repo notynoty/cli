@@ -281,7 +281,7 @@
       "inputs": { }
     },
     {
-      "enabled": true,
+      "enabled": false,
       "continueOnError": false,
       "alwaysRun": false,
       "displayName": "Download NuGet.exe",
@@ -301,7 +301,7 @@
       }
     },
     {
-      "enabled": true,
+      "enabled": false,
       "continueOnError": false,
       "alwaysRun": false,
       "displayName": "Publish NuGet Packages",
@@ -321,7 +321,7 @@
       }
     },
     {
-      "enabled": true,
+      "enabled": false,
       "continueOnError": false,
       "alwaysRun": false,
       "displayName": "Publish Build Artifacts",
@@ -340,7 +340,7 @@
       }
     },
     {
-      "enabled": true,
+      "enabled": false,
       "continueOnError": false,
       "alwaysRun": false,
       "displayName": "Publish Windows Installer NuPkg to VS Feed",
