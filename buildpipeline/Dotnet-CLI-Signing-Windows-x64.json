@@ -49,7 +49,7 @@
         "definitionType": "task"
       },
       "inputs": {
-        "solution": "build.proj",
+        "solution": "build\\Microsoft.DotNet.Cli.Signing.proj",
         "platform": "",
         "configuration": "$(BuildConfiguration)",
         "msbuildArguments": "/t:PostCompileSign $(MsbuildSigningArguments)",
@@ -76,7 +76,7 @@
         "definitionType": "task"
       },
       "inputs": {
-        "solution": "build.proj",
+        "solution": "build\\Microsoft.DotNet.Cli.Signing.proj",
         "platform": "",
         "configuration": "$(BuildConfiguration)",
         "msbuildArguments": "/t:SignNuPkgContents $(MsbuildSigningArguments)",
@@ -141,7 +141,7 @@
         "definitionType": "task"
       },
       "inputs": {
-        "solution": "build.proj",
+        "solution": "build\\Microsoft.DotNet.Cli.Signing.proj",
         "platform": "",
         "configuration": "$(BuildConfiguration)",
         "msbuildArguments": "/t:SignMsiAndCab $(MsbuildSigningArguments)",
@@ -206,7 +206,7 @@
         "definitionType": "task"
       },
       "inputs": {
-        "solution": "build.proj",
+        "solution": "build\\Microsoft.DotNet.Cli.Signing.proj",
         "platform": "",
         "configuration": "$(BuildConfiguration)",
         "msbuildArguments": "/t:SignEngine $(MsbuildSigningArguments)",
@@ -252,7 +252,7 @@
         "definitionType": "task"
       },
       "inputs": {
-        "solution": "build.proj",
+        "solution": "build\\Microsoft.DotNet.Cli.Signing.proj",
         "platform": "",
         "configuration": "$(BuildConfiguration)",
         "msbuildArguments": "/t:SignCliBundle $(MsbuildSigningArguments)",
@@ -472,7 +472,7 @@
       "value": "win81-x64"
     },
     "MsbuildSigningArguments": {
-      "value": "/p:SkipMsBuild15Projects=True /p:Architecture=x64 /v:detailed"
+      "value": "/p:Rid=$(RID) /p:Architecture=x64 /v:detailed"
     },
     "TeamName": {
       "value": "DotNetCore"

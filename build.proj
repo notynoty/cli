@@ -80,9 +80,8 @@
 
   <Import Project="build/Microsoft.DotNet.Cli.Prepare.targets" />
   <Import Project="build/Microsoft.DotNet.Cli.Compile.targets" />
-  <Import Project="build/Microsoft.DotNet.Cli.Signing.targets" />
   <Import Project="build/Microsoft.DotNet.Cli.Package.targets" />
-  <Import Project="build/Microsoft.DotNet.Cli.Test.targets" Condition="'$(SkipMsBuild15Projects)' != 'True'" />
+  <Import Project="build/Microsoft.DotNet.Cli.Test.targets" />
   <Import Project="build/Microsoft.DotNet.Cli.Publish.targets" />
   <Import Project="build/Microsoft.DotNet.Cli.Run.targets" />
 </Project>
